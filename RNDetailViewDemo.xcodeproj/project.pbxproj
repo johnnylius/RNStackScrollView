@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 47;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -62,14 +62,14 @@
 			children = (
 				B2C791E51F4AE25A00771268 /* AppDelegate.h */,
 				B2C791E61F4AE25A00771268 /* AppDelegate.m */,
-				B2C791E71F4AE25A00771268 /* Assets.xcassets */,
+				B2C791F01F4AE25A00771268 /* ViewController.h */,
+				B2C791F11F4AE25A00771268 /* ViewController.m */,
 				B2C791E81F4AE25A00771268 /* LaunchScreen.storyboard */,
 				B2C791EA1F4AE25A00771268 /* Main.storyboard */,
+				B2C791E71F4AE25A00771268 /* Assets.xcassets */,
 				B2C791EC1F4AE25A00771268 /* html */,
 				B2C791EE1F4AE25A00771268 /* Info.plist */,
 				B2C791EF1F4AE25A00771268 /* main.m */,
-				B2C791F01F4AE25A00771268 /* ViewController.h */,
-				B2C791F11F4AE25A00771268 /* ViewController.m */,
 			);
 			path = RNDetailViewDemo;
 			sourceTree = "<group>";
@@ -109,15 +109,17 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0830;
-				ORGANIZATIONNAME = ryan;
+				ORGANIZATIONNAME = Sogou;
 				TargetAttributes = {
 					9486CA941D3F864800C8AB87 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = 29H288BH37;
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
 			buildConfigurationList = 9486CA901D3F864800C8AB87 /* Build configuration list for PBXProject "RNDetailViewDemo" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 6.3";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -271,10 +273,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 29H288BH37;
 				INFOPLIST_FILE = RNDetailViewDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sogou.detailView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -282,10 +287,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = 29H288BH37;
 				INFOPLIST_FILE = RNDetailViewDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.sogou.detailView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
