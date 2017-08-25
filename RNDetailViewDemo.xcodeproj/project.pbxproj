@@ -14,6 +14,7 @@
 		B2C791F61F4AE25A00771268 /* details.html in Resources */ = {isa = PBXBuildFile; fileRef = B2C791ED1F4AE25A00771268 /* details.html */; };
 		B2C791F81F4AE25A00771268 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C791EF1F4AE25A00771268 /* main.m */; };
 		B2C791F91F4AE25A00771268 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B2C791F11F4AE25A00771268 /* ViewController.m */; };
+		B2F3AFCE1F4E7D6300C22422 /* RNStackScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = B2F3AFCD1F4E7D6300C22422 /* RNStackScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,8 @@
 		B2C791EF1F4AE25A00771268 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B2C791F01F4AE25A00771268 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		B2C791F11F4AE25A00771268 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		B2F3AFCC1F4E7D6300C22422 /* RNStackScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNStackScrollView.h; sourceTree = "<group>"; };
+		B2F3AFCD1F4E7D6300C22422 /* RNStackScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNStackScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +67,8 @@
 				B2C791E61F4AE25A00771268 /* AppDelegate.m */,
 				B2C791F01F4AE25A00771268 /* ViewController.h */,
 				B2C791F11F4AE25A00771268 /* ViewController.m */,
+				B2F3AFCC1F4E7D6300C22422 /* RNStackScrollView.h */,
+				B2F3AFCD1F4E7D6300C22422 /* RNStackScrollView.m */,
 				B2C791E81F4AE25A00771268 /* LaunchScreen.storyboard */,
 				B2C791EA1F4AE25A00771268 /* Main.storyboard */,
 				B2C791E71F4AE25A00771268 /* Assets.xcassets */,
@@ -155,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2F3AFCE1F4E7D6300C22422 /* RNStackScrollView.m in Sources */,
 				B2C791F91F4AE25A00771268 /* ViewController.m in Sources */,
 				B2C791F81F4AE25A00771268 /* main.m in Sources */,
 				B2C791F21F4AE25A00771268 /* AppDelegate.m in Sources */,
