@@ -11,45 +11,58 @@
 #define viewHeight viewSize.height
 
 #import "ViewController.h"
+#import "RNStackScrollView.h"
 
 @interface ViewController () <UIScrollViewDelegate, UIWebViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) RNStackScrollView *scrollView;
+@property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UIWebView *webView;
 @property (nonatomic, strong) UITableView *tableView;
-@property (nonatomic, assign) CGRect tableViewFrame;
+
+@property (nonatomic, assign) NSInteger count;
 
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
-    
     [super viewDidLoad];
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
-    self.scrollView.delegate = self;
+    NSArray *viewArray = @[self.headerView, self.webView, self.tableView];
+    self.scrollView = [[RNStackScrollView alloc] initWithViewArray:viewArray];
+    self.scrollView.frame = self.view.bounds;
     [self.view addSubview:self.scrollView];
-    
-    self.webView = [[UIWebView alloc] init];
-    self.webView.frame = self.view.bounds;
-    self.webView.delegate = self;
-    self.webView.scrollView.bounces = NO;
-    self.webView.scrollView.scrollEnabled = NO;
-    [self.scrollView addSubview:self.webView];
     [self loadHtml];
-    self.webView.backgroundColor = [UIColor redColor];
-    
-    self.tableView = [[UITableView alloc] init];
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-    self.tableView.bounces = NO;
-    self.tableView.scrollEnabled = NO;
-    self.tableView.frame = CGRectMake(0, viewHeight, viewWidth, viewHeight);
-    [self.scrollView addSubview:self.tableView];
-    self.tableView.backgroundColor = [UIColor blueColor];
-    
-    self.scrollView.contentSize = CGSizeMake(viewWidth, viewHeight * 6);
+}
+
+#pragma mark - Getter and Setter
+- (UIView *)headerView {
+    if (_headerView == nil) {
+        _headerView = [[UIView alloc] init];
+        _headerView.frame = CGRectMake(0, 0, 0, 60);
+        _headerView.backgroundColor = [UIColor redColor];
+    }
+    return _headerView;
+}
+
+- (UIWebView *)webView {
+    if (_webView == nil) {
+        _webView = [[UIWebView alloc] init];
+        _webView.backgroundColor = [UIColor redColor];
+    }
+    return _webView;
+}
+
+- (UITableView *)tableView {
+    if (_tableView == nil) {
+        _tableView = [[UITableView alloc] init];
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        _tableView.backgroundColor = [UIColor redColor];
+        self.count = 100;
+    }
+    return _tableView;
 }
 
 #pragma mark - Private Method
@@ -58,90 +71,34 @@
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
     NSURL *baseURL = [NSURL fileURLWithPath:htmlPath];
     [_webView loadHTMLString:htmlString baseURL:baseURL];
-    
-}
-
-#pragma mark - UIWebViewDelegate
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
-    NSLog(@"webView: contentSizeHeight = %f", webView.scrollView.contentSize.height);
-    
-    self.scrollView.contentSize = CGSizeMake(viewWidth, webView.scrollView.contentSize.height + 44 * 200);
-    self.tableViewFrame = CGRectMake(0, webView.scrollView.contentSize.height, viewWidth, viewHeight);
-    self.tableView.frame = self.tableViewFrame;
 }
 
 #pragma mark - UITableViewDataSource & UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 200;
+    return self.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     static NSString *cellId = @"cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         UIView *view = [[UIView alloc] init];
-        view.backgroundColor = [UIColor greenColor];
+        view.backgroundColor = [UIColor blueColor];
         cell.backgroundView = view;
     }
     cell.textLabel.text = [NSString stringWithFormat:@"%zd", indexPath.row];
-    NSLog(@"row = %zd", indexPath.row);
-    
     return cell;
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if ([scrollView isKindOfClass:NSClassFromString(@"_UIWebViewScrollView")] ||
-        [scrollView isKindOfClass:[UITableView class]]) {
-        return;
+    if ([scrollView isKindOfClass:[UITableView class]]) {
+        if (scrollView.contentOffset.y > 3000) {
+            self.count = 300;
+            [self.tableView reloadData];
+        }
     }
-
-    NSLog(@"scrollView: x = %f, y = %f", scrollView.contentOffset.x, scrollView.contentOffset.y);
-    
-    
-    //
-    CGFloat webViewMaxContentOffsetY = self.webView.scrollView.contentSize.height - self.webView.frame.size.height;
-    
-    CGPoint offset = scrollView.contentOffset;
-    if (offset.y < 0) {
-        offset.y = 0;
-    }
-    
-    CGPoint webViewOffset = offset;
-    CGRect webViewFrame = self.webView.frame;
-    webViewFrame.origin = offset;
-    if (webViewOffset.y > webViewMaxContentOffsetY) {
-        webViewOffset.y = webViewMaxContentOffsetY;
-        webViewFrame.origin = webViewOffset;
-    }
-    
-    self.webView.scrollView.contentOffset = webViewOffset;
-    self.webView.frame = webViewFrame;
-    NSLog(@"webView: x = %f, y = %f", self.webView.frame.origin.x, self.webView.frame.origin.y);
-    
-    
-    //
-    CGFloat tableViewMaxContentOffsetY = self.tableView.contentSize.height - self.tableView.frame.size.height;
-    
-    if (offset.y < webViewMaxContentOffsetY + self.tableView.frame.size.height) {
-        offset.y = webViewMaxContentOffsetY + self.tableView.frame.size.height;
-    }
-
-    offset.y = offset.y - (webViewMaxContentOffsetY + self.tableView.frame.size.height);
-    CGPoint tableViewOffset = offset;
-    CGRect tableViewFrame = self.tableView.frame;
-    tableViewFrame.origin.y = self.tableViewFrame.origin.y + offset.y;
-    if (tableViewOffset.y > tableViewMaxContentOffsetY) {
-        tableViewOffset.y = tableViewMaxContentOffsetY;
-        tableViewFrame.origin.y = self.tableViewFrame.origin.y + tableViewOffset.y;
-    }
-    
-    
-    self.tableView.frame = tableViewFrame;
-    self.tableView.contentOffset = tableViewOffset;
-    NSLog(@"tableView: x = %f, y = %f", self.tableView.frame.origin.x, self.tableView.frame.origin.y);
 }
 
 - (void)didReceiveMemoryWarning {
