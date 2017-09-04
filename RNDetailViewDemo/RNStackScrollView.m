@@ -173,36 +173,40 @@
         if ([view isKindOfClass:[UIWebView class]] ||
             [view isKindOfClass:[WKWebView class]]) {
             UIWebView *webView = (UIWebView *)view;
+            // 修正frame高度
+            CGRect frame = webView.scrollView.frame;
+            frame.size.height = self.frame.size.height;
+            if (frame.size.height > webView.scrollView.contentSize.height) {
+                frame.size.height = webView.scrollView.contentSize.height;
+            }
+            
             // 修正滚动偏移最大值
             CGFloat maxContentOffsetY = webView.scrollView.contentSize.height - webView.frame.size.height;
             if (offset.y > maxContentOffsetY) {
                 offset.y = maxContentOffsetY;
             }
             
-            // 修正frame
-            CGRect frame = webView.frame;
-            frame.size.height = webView.scrollView.contentSize.height;
-            if (frame.size.height > self.frame.size.height) {
-                frame.size.height = self.frame.size.height;
-            }
+            // 修正frame坐标
             frame.origin.y = viewFrameBegin + offset.y;
             
             webView.frame = frame;
             webView.scrollView.contentOffset = offset;
         } else if ([view isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view;
+            // 修正frame高度
+            CGRect frame = scrollView.frame;
+            frame.size.height = self.frame.size.height;
+            if (frame.size.height > scrollView.contentSize.height) {
+                frame.size.height = scrollView.contentSize.height;
+            }
+            
             // 修正滚动偏移最大值
-            CGFloat maxContentOffsetY = scrollView.contentSize.height - scrollView.frame.size.height;
+            CGFloat maxContentOffsetY = scrollView.contentSize.height - frame.size.height;
             if (offset.y > maxContentOffsetY) {
                 offset.y = maxContentOffsetY;
             }
             
-            // 修正frame
-            CGRect frame = scrollView.frame;
-            frame.size.height = scrollView.contentSize.height;
-            if (frame.size.height > self.frame.size.height) {
-                frame.size.height = self.frame.size.height;
-            }
+            // 修正frame坐标
             frame.origin.y = viewFrameBegin + offset.y;
             
             scrollView.frame = frame;
