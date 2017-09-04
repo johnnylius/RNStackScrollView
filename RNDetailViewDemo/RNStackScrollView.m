@@ -1,6 +1,6 @@
 //
 //  RNStackScrollView.m
-//  RNDetailViewDemo
+//  RNStackScrollView
 //
 //  Created by Johnny on 2017/8/21.
 //  Copyright © 2017年 Sogou. All rights reserved.
@@ -35,6 +35,32 @@
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     [self adjustStackViewsFrame];
+}
+
+#pragma mark - Public Method
+- (void)scrollToViewBeginWithView:(UIView *)view animated:(BOOL)animated {
+    [self scrollToViewOffsetWithView:view offset:0 animated:animated];
+}
+
+- (void)scrollToViewOffsetWithView:(UIView *)view offset:(CGFloat)offset animated:(BOOL)animated {
+    NSInteger index = [self.viewArray indexOfObject:view];
+    if (index == NSNotFound) {
+        return;
+    }
+    
+    CGFloat position = [self.frameBeginArray[index] floatValue];
+    position += offset;
+    if (position < 0) {
+        position = 0;
+    }
+    // 如果automaticallyAdjustsScrollViewInsets为YES时，处理contentInset.top
+    if (position > self.contentSize.height - self.frame.size.height + self.contentInset.top) {
+        position = self.contentSize.height - self.frame.size.height + self.contentInset.top;
+    }
+    
+    CGPoint contentOffset = self.contentOffset;
+    contentOffset.y = position - self.contentInset.top;
+    [self setContentOffset:contentOffset animated:animated];
 }
 
 #pragma mark - NSKeyValueObserving
@@ -115,7 +141,6 @@
     [self.viewArray enumerateObjectsUsingBlock:^(UIView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
         self.frameBeginArray[idx] = @(lastFrameBegin);
         
-        CGSize contentSize = self.contentSize;
         if ([view isKindOfClass:[UIWebView class]] ||
             [view isKindOfClass:[WKWebView class]]) {
             UIWebView *webView = (UIWebView *)view;
@@ -125,7 +150,6 @@
             lastFrameBegin = lastFrameBegin + scrollView.contentSize.height;
         } else if ([view isKindOfClass:[UIView class]]) {
             lastFrameBegin = lastFrameBegin + view.frame.size.height;
-            contentSize.height = lastFrameBegin;
         }
     }];
     
