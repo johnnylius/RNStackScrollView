@@ -144,10 +144,10 @@
         if ([view isKindOfClass:[UIWebView class]] ||
             [view isKindOfClass:[WKWebView class]]) {
             UIWebView *webView = (UIWebView *)view;
-            lastFrameBegin = lastFrameBegin + webView.scrollView.contentSize.height;
+            lastFrameBegin = lastFrameBegin + webView.scrollView.contentSize.height + webView.scrollView.contentInset.top + webView.scrollView.contentInset.bottom;
         } else if ([view isKindOfClass:[UIScrollView class]]) {
             UIScrollView *scrollView = (UIScrollView *)view;
-            lastFrameBegin = lastFrameBegin + scrollView.contentSize.height;
+            lastFrameBegin = lastFrameBegin + scrollView.contentSize.height + scrollView.contentInset.top + scrollView.contentInset.bottom;
         } else if ([view isKindOfClass:[UIView class]]) {
             lastFrameBegin = lastFrameBegin + view.frame.size.height;
         }
@@ -174,20 +174,23 @@
             [view isKindOfClass:[WKWebView class]]) {
             UIWebView *webView = (UIWebView *)view;
             // 修正frame高度
-            CGRect frame = webView.scrollView.frame;
+            CGRect frame = webView.frame;
             frame.size.height = self.frame.size.height;
             if (frame.size.height > webView.scrollView.contentSize.height) {
                 frame.size.height = webView.scrollView.contentSize.height;
             }
             
-            // 修正滚动偏移最大值
-            CGFloat maxContentOffsetY = webView.scrollView.contentSize.height - webView.frame.size.height;
+            // 修正滚动偏移最大值，content高度 - frame高度 + inset上下
+            CGFloat maxContentOffsetY = webView.scrollView.contentSize.height - frame.size.height + webView.scrollView.contentInset.top + webView.scrollView.contentInset.bottom;
             if (offset.y > maxContentOffsetY) {
                 offset.y = maxContentOffsetY;
             }
             
             // 修正frame坐标
             frame.origin.y = viewFrameBegin + offset.y;
+            
+            // 修正cotent滚动偏移
+            offset.y -= webView.scrollView.contentInset.top;
             
             webView.frame = frame;
             webView.scrollView.contentOffset = offset;
@@ -200,14 +203,17 @@
                 frame.size.height = scrollView.contentSize.height;
             }
             
-            // 修正滚动偏移最大值
-            CGFloat maxContentOffsetY = scrollView.contentSize.height - frame.size.height;
+            // 修正滚动偏移最大值，content高度 - frame高度 + inset上下
+            CGFloat maxContentOffsetY = scrollView.contentSize.height - frame.size.height + scrollView.contentInset.top + scrollView.contentInset.bottom;
             if (offset.y > maxContentOffsetY) {
                 offset.y = maxContentOffsetY;
             }
             
             // 修正frame坐标
             frame.origin.y = viewFrameBegin + offset.y;
+            
+            // 修正cotent滚动偏移
+            offset.y -= scrollView.contentInset.top;
             
             scrollView.frame = frame;
             scrollView.contentOffset = offset;
