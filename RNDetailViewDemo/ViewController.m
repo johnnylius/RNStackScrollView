@@ -95,8 +95,10 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if ([scrollView isKindOfClass:[UITableView class]]) {
         if (scrollView.contentOffset.y > 3000) {
-            self.count = 300;
-            [self.tableView reloadData];
+            if (self.count != 300) {
+                self.count = 300;
+                [self.tableView reloadData];
+            }
         }
     }
 }
